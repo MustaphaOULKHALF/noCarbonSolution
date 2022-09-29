@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -18,6 +19,7 @@ using noCarbon.Services.Categories;
 using noCarbon.Services.Historics;
 using noCarbon.Services.Security;
 using Serilog;
+using System.Net;
 using System.Reflection;
 using System.Text;
 
@@ -151,8 +153,11 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IHistoricService, HistoricService>();
-builder.Services.AddScoped<IActionsService, ActionsService>();
-
+builder.Services.AddScoped<IActionsService, ActionsService>(); 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -163,6 +168,10 @@ if (appSettings.HostConfig.EnableSwagger)
 }
 
 app.UseHttpsRedirection();
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -170,4 +179,5 @@ app.MapControllers()
    .RequireAuthorization();
 app.UseMiddleware<HttpLoggingMiddleware>();
 app.UseMiddleware<ErrorHandlerMiddleware>();
+
 app.Run();
