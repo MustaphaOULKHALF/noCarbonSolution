@@ -1,13 +1,5 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:47325",
-      "sslPort": 44371
-    }
-  },
   "profiles": {
     "noCarbon.API": {
       "commandName": "Project",

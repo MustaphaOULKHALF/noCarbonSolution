@@ -154,10 +154,10 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IEncryptionService, EncryptionService>();
 builder.Services.AddScoped<IHistoricService, HistoricService>();
 builder.Services.AddScoped<IActionsService, ActionsService>(); 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
-});
+//builder.Services.Configure<ForwardedHeadersOptions>(options =>
+//{
+//    options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
+//});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -167,11 +167,11 @@ if (appSettings.HostConfig.EnableSwagger)
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+//app.UseHttpsRedirection();
+//app.UseForwardedHeaders(new ForwardedHeadersOptions
+//{
+//    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+//});
 app.UseAuthentication();
 app.UseAuthorization();
 
