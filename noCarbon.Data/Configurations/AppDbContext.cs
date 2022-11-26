@@ -8,7 +8,7 @@ using System.Data.Common;
 
 namespace noCarbon.Data.Configurations;
 
-public class AppDbContext : DbContext, IDisposable
+public class AppDbContext : DbContext
 {
 
     public AppDbContext() : base() { }
@@ -28,12 +28,12 @@ public class AppDbContext : DbContext, IDisposable
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new CustomerBuilder());
+        modelBuilder.ApplyConfiguration(new CustomerRefreshTokenBuilder());
         modelBuilder.ApplyConfiguration(new CategoryBuilder());
         modelBuilder.ApplyConfiguration(new EventBuilder());
         modelBuilder.ApplyConfiguration(new SponsorshipBuilder());
         modelBuilder.ApplyConfiguration(new ActionsBuilder());
         modelBuilder.ApplyConfiguration(new HistoricBuilder());
-        modelBuilder.ApplyConfiguration(new CustomerRefreshTokenBuilder());
         modelBuilder.Entity<Historic_Result>().HasNoKey();
         modelBuilder.Entity<GetBalance_Result>().HasNoKey();
         modelBuilder.Entity<GetLeaderboard_Result>().HasNoKey();
@@ -177,10 +177,7 @@ public class AppDbContext : DbContext, IDisposable
     /// Saves all changes made in this context to the database
     /// </summary>
     /// <returns>The number of state entries written to the database</returns>
-    public virtual async Task SaveChangesAsync()
-    {
-        await this.SaveChangesAsync();
-    }
+    public virtual async Task SaveChangesAsync() => await this.SaveChangesAsync();
     public IQueryable<Historic_Result> GetHistoric(Guid? CustomerId, int? CategoryId = null, int? ActionId = null)
     {
         var ParametreCustomerId = new SqlParameter
@@ -222,7 +219,7 @@ public class AppDbContext : DbContext, IDisposable
             ParameterName = "@CustomerId"
         };
 
-        var sql = GetExecutedSqlQuery("SELECT * FROM [dbo].[GetBalance](@CustomerId)", ParametreCustomerId);
+        var sql = GetExecutedSqlQuery("CALL GetBalance(@CustomerId)", ParametreCustomerId);
         var result = await base.Set<GetBalance_Result>().FromSqlRaw(sql).ToListAsync();
         return result.FirstOrDefault();
     }
@@ -258,17 +255,6 @@ public class AppDbContext : DbContext, IDisposable
 
         var sql = GetExecutedSqlQuery("SELECT * FROM [dbo].[GetYearlyTrend](@CustomerId)", ParametreCustomerId);
         return (await base.Set<GetYearlyTrend_Result>().FromSqlRaw(sql).ToListAsync()).AsQueryable();
-    }
-    public override void Dispose()
-    {
-        base.Dispose();
-        GC.SuppressFinalize(this);
-    }
-
-    public override async ValueTask DisposeAsync()
-    {
-        await base.DisposeAsync();
-        GC.SuppressFinalize(this);
     }
     #endregion
 }

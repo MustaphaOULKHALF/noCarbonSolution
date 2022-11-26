@@ -21,5 +21,9 @@ public class SecurityConfig
     /// Gets or sets the audience
     /// </summary>
     public string Audience { get; set; }
+    /// <summary>
+    /// Gets or sets the expiry time
+    /// </summary>
+    public int Expires { get; set; }
 
 }

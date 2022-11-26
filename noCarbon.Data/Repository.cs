@@ -20,6 +20,7 @@ public partial class Repository<TEntity> : IRepository<TEntity> where TEntity : 
     public Repository(AppDbContext context)
     {
         this._context = context;
+        _entities = context.Set<TEntity>();
     }
 
     #endregion
@@ -402,8 +403,7 @@ public partial class Repository<TEntity> : IRepository<TEntity> where TEntity : 
     {
         get
         {
-            if (_entities == null)
-                _entities = _context.Set<TEntity>();
+            _entities ??= _context.Set<TEntity>();
 
             return _entities;
         }

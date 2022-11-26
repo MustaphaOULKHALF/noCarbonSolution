@@ -19,23 +19,23 @@ public partial class AccountService : IAccountService
     private readonly AppSettings _appSettings;
     private readonly JwtSecurityTokenHandler _tokenHandler;
     private readonly IRepository<Customer> _customerRepository;
-    private readonly IRepository<CustomerRefreshToken> _customerRefreshToeknRepository;
+    private readonly IRepository<CustomerRefreshToken> _customerRefreshTokenRepository;
     private readonly IEncryptionService _encryptionService;
     private readonly AppDbContext _appDbContext;
     #endregion
     #region Ctor
     public AccountService(AppSettings appSettings,
         IRepository<Customer> customerRepository,
-        IRepository<CustomerRefreshToken> customerRefreshToeknRepository,
+        IRepository<CustomerRefreshToken> customerRefreshTokenRepository,
         IEncryptionService encryptionService,
         AppDbContext appDbContext)
     {
         this._tokenHandler = new JwtSecurityTokenHandler();
         this._appSettings = appSettings;
+        this._customerRefreshTokenRepository = customerRefreshTokenRepository;
         this._customerRepository = customerRepository;
         this._encryptionService = encryptionService;
         this._appDbContext = appDbContext;
-        this._customerRefreshToeknRepository = customerRefreshToeknRepository;
     }
 
     #endregion
@@ -83,13 +83,13 @@ public partial class AccountService : IAccountService
                  new Claim(ClaimTypes.Name, username),
                  new Claim(ClaimTypes.PrimarySid, customer.Id.ToString())
              }),
-            Expires = DateTime.Now.AddMinutes(1),
+            Expires = DateTime.Now.AddMinutes(_appSettings.SecurityConfig.Expires),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = _tokenHandler.CreateToken(tokenDescriptor);
         var refreshToken = GenerateRefreshToken();
         var result = new LoginResult { AccessToken = _tokenHandler.WriteToken(token), RefreshToken = refreshToken };
-        await _customerRefreshToeknRepository.InsertAsync(new CustomerRefreshToken { 
+        _customerRefreshTokenRepository.Insert(new CustomerRefreshToken { 
             UserName = username, RefreshToken = refreshToken
         });
         return result;
@@ -119,7 +119,7 @@ public partial class AccountService : IAccountService
 
     public virtual async Task<CustomerRefreshToken> GetCustomerRefresh(string username, string token)
     {
-        var result = await _customerRefreshToeknRepository.Table.Where(e=> e.UserName.ToLower().Trim() == username.ToLower().Trim() && e.RefreshToken == token).FirstOrDefaultAsync();
+        var result = await _customerRefreshTokenRepository.Table.Where(e=> e.UserName.ToLower().Trim() == username.ToLower().Trim() && e.RefreshToken == token).FirstOrDefaultAsync();
         if (result == null)
             throw new EntityNotFoundException(string.Format("cannot find an entity {0} with the identifier {1} ", typeof(CustomerRefreshToken), token));
         return result;
@@ -135,7 +135,7 @@ public partial class AccountService : IAccountService
                  new Claim(ClaimTypes.Name, username),
                  new Claim(ClaimTypes.PrimarySid, customerId)
           }),
-            Expires = DateTime.Now.AddMinutes(1),
+            Expires = DateTime.Now.AddMinutes(_appSettings.SecurityConfig.Expires),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = _tokenHandler.CreateToken(tokenDescriptor);
@@ -146,8 +146,8 @@ public partial class AccountService : IAccountService
     {
        if(CustomerRefreshTokenId == 0)
             throw new ArgumentNullException(nameof(CustomerRefreshTokenId));
-       var customerRefreshToken=  _customerRefreshToeknRepository.GetById(CustomerRefreshTokenId);
-       _customerRefreshToeknRepository.Delete(customerRefreshToken);
+       var customerRefreshToken=  _customerRefreshTokenRepository.GetById(CustomerRefreshTokenId);
+       _customerRefreshTokenRepository.Delete(customerRefreshToken);
 
     }
 
@@ -181,7 +181,7 @@ public partial class AccountService : IAccountService
 
     public async Task AddRefreshToken(string username, string refreshToken)
     {
-        await _customerRefreshToeknRepository.InsertAsync(new CustomerRefreshToken
+        _customerRefreshTokenRepository.Insert(new CustomerRefreshToken
         {
             UserName = username,
             RefreshToken = refreshToken

@@ -1,7 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -19,7 +18,6 @@ using noCarbon.Services.Categories;
 using noCarbon.Services.Historics;
 using noCarbon.Services.Security;
 using Serilog;
-using System.Net;
 using System.Reflection;
 using System.Text;
 
