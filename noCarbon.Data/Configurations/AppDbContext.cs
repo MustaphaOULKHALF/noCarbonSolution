@@ -204,7 +204,7 @@ public class AppDbContext : DbContext
             SourceColumnNullMapping = true,
             ParameterName = "@ActionId"
         };
-        var sql = GetExecutedSqlQuery("SELECT * FROM [dbo].[GetHistoric](@CustomerId,@CategoryId,@ActionId)", ParametreCustomerId, ParametreCategoryId, ParametreActionId);
+        var sql = GetExecutedSqlQuery("CALL GetHistoric(@CustomerId,@CategoryId,@ActionId)", ParametreCustomerId, ParametreCategoryId, ParametreActionId);
         var result = base.Set<Historic_Result>().FromSqlRaw(sql).ToList();
         return result.AsQueryable();
     }
@@ -225,7 +225,7 @@ public class AppDbContext : DbContext
     }
     public async Task<IQueryable<GetLeaderboard_Result>> GetLeaderboard()
     {
-        var result = await base.Set<GetLeaderboard_Result>().FromSqlRaw("SELECT * FROM [dbo].[GetLeaderboard] ()").ToListAsync();
+        var result = await base.Set<GetLeaderboard_Result>().FromSqlRaw("CALL GetLeaderboard()").ToListAsync();
         return result.AsQueryable();
     }
     public async Task<IQueryable<GetWeeklyTrend_Result>> GetMyWeeklyTrend(Guid CustomerId)
@@ -239,7 +239,7 @@ public class AppDbContext : DbContext
             ParameterName = "@CustomerId"
         };
 
-        var sql = GetExecutedSqlQuery("SELECT * FROM [dbo].[GetMyWeeklyTrend](@CustomerId)", ParametreCustomerId);
+        var sql = GetExecutedSqlQuery("CALL GetMyWeeklyTrend(@CustomerId)", ParametreCustomerId);
         return (await base.Set<GetWeeklyTrend_Result>().FromSqlRaw(sql).ToListAsync()).AsQueryable();
     }
     public async Task<IQueryable<GetYearlyTrend_Result>> GetYearlyTrend(Guid CustomerId)
@@ -253,7 +253,7 @@ public class AppDbContext : DbContext
             ParameterName = "@CustomerId"
         };
 
-        var sql = GetExecutedSqlQuery("SELECT * FROM [dbo].[GetYearlyTrend](@CustomerId)", ParametreCustomerId);
+        var sql = GetExecutedSqlQuery("CALL GetYearlyTrend(@CustomerId)", ParametreCustomerId);
         return (await base.Set<GetYearlyTrend_Result>().FromSqlRaw(sql).ToListAsync()).AsQueryable();
     }
     #endregion

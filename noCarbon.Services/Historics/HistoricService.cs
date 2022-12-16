@@ -106,6 +106,7 @@ public partial class HistoricService : IHistoricService
                 result.CurrentCustomer = result.Leaderboards.ElementAt(i);
                 result.Leaderboards.RemoveAt(i);
             }
+
         }
         return result;
     }

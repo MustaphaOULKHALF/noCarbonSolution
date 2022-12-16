@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace noCarbon.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class initDataBase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -102,80 +102,6 @@ namespace noCarbon.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "GetBalance_Result",
-                columns: table => new
-                {
-                    Balance = table.Column<int>(type: "int", nullable: false),
-                    TotalImpact = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
-                },
-                constraints: table =>
-                {
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "GetLeaderboard_Result",
-                columns: table => new
-                {
-                    Classement = table.Column<int>(type: "int", nullable: true),
-                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    UserName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Balance = table.Column<int>(type: "int", nullable: false),
-                    TotalImpact = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
-                },
-                constraints: table =>
-                {
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "GetWeeklyTrend_Result",
-                columns: table => new
-                {
-                    DayOfTheWeek = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    TotalImpact = table.Column<decimal>(type: "decimal(65,30)", nullable: false)
-                },
-                constraints: table =>
-                {
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "GetYearlyTrend_Result",
-                columns: table => new
-                {
-                    Year = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TotalImpact = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    Consomer = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Historic_Result",
-                columns: table => new
-                {
-                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    CategoryName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ActionName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Points = table.Column<int>(type: "int", nullable: false),
-                    ReducedCarb = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    OperationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    OperationTime = table.Column<TimeSpan>(type: "time(6)", nullable: false)
-                },
-                constraints: table =>
-                {
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -310,22 +236,7 @@ namespace noCarbon.Data.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "GetBalance_Result");
-
-            migrationBuilder.DropTable(
-                name: "GetLeaderboard_Result");
-
-            migrationBuilder.DropTable(
-                name: "GetWeeklyTrend_Result");
-
-            migrationBuilder.DropTable(
-                name: "GetYearlyTrend_Result");
-
-            migrationBuilder.DropTable(
                 name: "Historic");
-
-            migrationBuilder.DropTable(
-                name: "Historic_Result");
 
             migrationBuilder.DropTable(
                 name: "Sponsorship");

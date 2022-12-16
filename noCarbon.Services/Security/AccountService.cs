@@ -67,7 +67,7 @@ public partial class AccountService : IAccountService
         string _password = string.Empty;
         try
         {
-            _password = HashHelper.Sha256_hash(_encryptionService.DecryptText(password));
+            _password = password;//HashHelper.Sha256_hash(_encryptionService.DecryptText(password));
         }
         catch
         {
@@ -103,7 +103,7 @@ public partial class AccountService : IAccountService
             var customer = new Customer()
             {
                 UserName = add.UserName,
-                Password = HashHelper.Sha256_hash(_encryptionService.DecryptText(add.Password)),
+                Password = add.Password,//HashHelper.Sha256_hash(_encryptionService.DecryptText(add.Password)),
                 Email = add.Mail,
                 AllowNotification = true,
             };

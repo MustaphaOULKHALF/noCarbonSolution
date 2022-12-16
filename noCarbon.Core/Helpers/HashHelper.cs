@@ -1,5 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿using System.Buffers.Text;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.Unicode;
 
 namespace noCarbon.Core.Helpers;
 /// <summary>
@@ -32,6 +34,7 @@ public partial class HashHelper
 
         return BitConverter.ToString(algorithm.ComputeHash(data)).Replace("-", string.Empty);
     }
+    
     public static string Sha256_hash(string value)
     {
         StringBuilder Sb = new();
