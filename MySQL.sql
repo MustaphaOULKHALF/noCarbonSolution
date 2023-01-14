@@ -39,6 +39,6 @@ UNION SELECT 6 ) AS DATEDAY) AS D
 LEFT JOIN Historic H
 ON DATE(H.OperationDate) = date(D.DATEDAY) AND H.CustomerId = pCustomerId
 GROUP BY DayOfTheWeek
-ORDER BY D.DATEDAY ASC;
+ORDER BY DayOfTheWeek ASC;
 END$$
 DELIMITER ;
