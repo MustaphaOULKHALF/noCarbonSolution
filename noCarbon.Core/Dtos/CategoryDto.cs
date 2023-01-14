@@ -2,6 +2,7 @@
 
 public partial class CategoryDto
 {
+    public CategoryDto() { }
     public CategoryDto(int id)
     {
         this.Id = id;

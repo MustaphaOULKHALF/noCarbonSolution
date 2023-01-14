@@ -16,7 +16,9 @@ public class InputToDto : Profile
     {
         CreateMap<AddCustomerInput, AddCustomerDto>();
         CreateMap<RefreshTokenInput, LoginResult>();
+
         CreateMap<ActionsInput, ActionsDto>();
-        
+        CreateMap<CategoryInput, CategoryDto>();
+        CreateMap<AddHistoricDto, HistoricDto>();
     }
 }

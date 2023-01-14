@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using noCarbon.API.Infrastracture;
-using noCarbon.API.Infrastracture.Filters;
 using noCarbon.API.Models;
 using noCarbon.Core.Dtos;
 using noCarbon.Core.Exceptions;

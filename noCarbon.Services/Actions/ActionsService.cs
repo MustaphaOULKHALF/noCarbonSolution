@@ -32,7 +32,7 @@ public partial class ActionsService : IActionsService
     /// <returns>action list</returns>
     public async Task<IList<ActionsDto>> GetAll(int? CategoryId = null)
     {
-        var result = _ActionsRepository.TableNoTracking.Select(a => new ActionsDto() { Id = a.Id, Name = a.Name, Description = a.Description, CategoryId = a.CategoryId, Points = a.Points, ReducedCarb = a.ReducedCarb }).AsQueryable();
+        var result = _ActionsRepository.TableNoTracking.Select(a => new ActionsDto() { Id = a.Id, Name = a.Name, Description = a.Description, CategoryId = a.CategoryId,CategoryName = a.Category.Name, Points = a.Points, ReducedCarb = a.ReducedCarb }).AsQueryable();
         if (CategoryId.HasValue && CategoryId != 0)
             return await result.Where(x => x.CategoryId == CategoryId).ToListAsync();
         return await result.ToListAsync();
@@ -49,7 +49,7 @@ public partial class ActionsService : IActionsService
         var action = await _ActionsRepository.GetByIdAsync(id);
         if (action == null)
             throw new EntityNotFoundException(string.Format("cannot find an entity {0} with the identifier {1} ", typeof(Actions), id));
-        return new ActionsDto() { Id = action.Id, Name = action.Name, Description = action.Description, CategoryId = action.CategoryId, Points = action.Points, ReducedCarb = action.ReducedCarb };
+        return new ActionsDto() { Id = action.Id, Name = action.Name, Description = action.Description, CategoryId = action.CategoryId, CategoryName = action.Category.Name, Points = action.Points, ReducedCarb = action.ReducedCarb };
     }
     /// <summary>
     /// add new action
