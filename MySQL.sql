@@ -21,8 +21,9 @@ DELIMITER $$
 CREATE DEFINER=`appuser`@`localhost` PROCEDURE `GetLeaderboard`()
 BEGIN  
 	SET @row_number = 0;
-	SELECT @row_number := @row_number + 1 AS Classement, H.CustomerId, c.UserName, COALESCE(SUM(H.POINTS),0) as Balance, COALESCE(SUM(H.ReducedCarb),0) as TotalImpact FROM Historic H
-	INNER JOIN Customer c ON H.CustomerId = c.Id
+    SELECT @row_number := @row_number + 1 AS Classement, Historic.CustomerId, Customer.UserName, COALESCE(SUM(Historic.POINTS),0) as Balance, COALESCE(SUM(Historic.ReducedCarb),0) as TotalImpact FROM Historic
+    INNER JOIN Customer ON Historic.CustomerId = Customer.Id
+    GROUP BY Historic.CustomerId
     ORDER BY TotalImpact;
 END$$
 DELIMITER ;
