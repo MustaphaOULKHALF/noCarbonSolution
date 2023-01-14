@@ -1,4 +1,5 @@
 USE noCarbon;
+DROP PROCEDURE [IF EXISTS] GetBalance;
 DELIMITER $$
 CREATE DEFINER=`appuser`@`localhost` PROCEDURE `GetBalance`(pCustomerId CHAR(36))
 BEGIN  
@@ -17,6 +18,7 @@ BEGIN
     AND (H.ActionId = CASE WHEN ((pActionId IS NULL) OR (pActionId = '')) THEN H.ActionId ELSE pActionId END);  
 END$$
 DELIMITER ;
+DROP PROCEDURE [IF EXISTS] GetLeaderboard;
 DELIMITER $$
 CREATE DEFINER=`appuser`@`localhost` PROCEDURE `GetLeaderboard`()
 BEGIN  
@@ -27,6 +29,7 @@ BEGIN
     ORDER BY TotalImpact;
 END$$
 DELIMITER ;
+DROP PROCEDURE [IF EXISTS] GetMyWeeklyTrend;
 DELIMITER $$
 CREATE DEFINER=`appuser`@`localhost` PROCEDURE `GetMyWeeklyTrend`(pCustomerId CHAR(36))
 BEGIN  
